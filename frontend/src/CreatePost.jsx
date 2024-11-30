@@ -21,14 +21,15 @@ function CreatePost({authorId}){
         axios.post("http://localhost:3000/createpost", {title, content,authorId}, { withCredentials: true })
         .then(res=>{
             console.log("Submitted Data:", { title, content, authorId });
-            console.log(res.data);
+            // console.log(res.data);
             alert("Post Created Successfully");
             navigate("/");
             setTitle("");
             setContent("");
         })
         .catch(err=>{
-            console.log(err)
+            console.log(err);
+            console.log("this is the error in create post after registration: ",title, content, authorId)
             alert(`Error in posting your blog please try again ${err}, there might me some data you not filled`);
             navigate("/createpost");
             setTitle("");
@@ -58,7 +59,6 @@ function CreatePost({authorId}){
             placeholder="Write your blog here" 
             value={content} 
             onChange={handelContent}/>
-            {/* <input type="date" value={currentDate} readOnly /> */}
             <p>Created on: {currentDate.split('-').reverse().join('/')} </p>
             <button type="submit">Create Blog</button>
             </form>

@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from 'axios';
 
-function Login({ setIsAuthenticated, setUserId}) {
+function Login({ setIsAuthenticated, setUserId,setProfileName}) {
   const [username, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -24,9 +24,11 @@ function Login({ setIsAuthenticated, setUserId}) {
         if (res.data.success) {
           setIsAuthenticated(true);
           setUserId(res.data.userId);
-          navigate('/'); // Redirect to home
+          setProfileName(res.data.userName);
+          navigate('/');
         } else {
-          alert(res.data.message); // Show error message
+          alert(res.data.message);
+          navigate("/login"); 
         }
       })
       .catch((err) => {
@@ -37,10 +39,14 @@ function Login({ setIsAuthenticated, setUserId}) {
   return (
     <div>
       <form onSubmit={handleSubmit}>
+        <div>
         <label htmlFor="email">Enter your email:</label>
         <input type="email" name="username" placeholder="Enter your email" value={username} onChange={handleEmailChange}/>
+        </div>
+        <div>
         <label htmlFor="password">Password:</label>
         <input type="password" placeholder="Password" value={password} onChange={handlePasswordChange}/>
+        </div>
         <button type="submit">Login</button>
       </form>
     </div>

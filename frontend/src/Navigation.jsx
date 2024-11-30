@@ -3,12 +3,15 @@ import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
 import CreatePost from "./CreatePost";
 import Home from "./Home";
 import Login from "./Login";
+import Register from "./Register";
+import Profile from "./Profile";
 import axios from "axios";
 import YourPost from "./YourPost";
 
 function Navigation() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
+  const [profileName, setProfileName]= useState("");
 
   function handleLogout() {
     setIsAuthenticated(false);
@@ -16,27 +19,53 @@ function Navigation() {
     axios
       .post("http://localhost:3000/logout", {}, { withCredentials: true })
       .then(() => {
-        // Perform any additional actions after logout
         navigate("/");
       });
   }
-  
+
   return (
     <Router>
       <div>
-        <nav>
-          <Link to="/">Home</Link>
-          {!isAuthenticated ? (
-            <button>
-              <Link to="/login">Login</Link>
-            </button>
-          ) : (
-            <div>
-              <Link to="/createpost"> Create Post</Link>
-              <Link to="/yourpost">Your Post</Link>
-              <button onClick={handleLogout}>Logout</button>
-            </div>
-          )}
+        <nav className="navbar">
+          <h1>BlogIn</h1>
+          <ul>
+            <li>
+              
+              <Link to="/">Home</Link>
+            </li>
+            {!isAuthenticated ? (
+              <div>
+                <li>
+                  <button>
+                    <Link to="/login">Login</Link>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <Link to="/register">Register</Link>
+                  </button>
+                </li>
+              </div>
+            ) : (
+              <div>
+                <li>
+                  
+                  <Link to="/createpost"> Create Post</Link>
+                </li>
+                <li>
+                  
+                  <Link to="/yourpost">Your Post</Link>
+                </li>
+                <li>
+                  
+                  <button onClick={handleLogout}>Logout</button>
+                </li>
+                <li>
+                  <Profile userName={profileName}/>
+                </li>
+              </div>
+            )}
+          </ul>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -46,6 +75,17 @@ function Navigation() {
               <Login
                 setIsAuthenticated={setIsAuthenticated}
                 setUserId={setUserId}
+                setProfileName={setProfileName}
+              />
+            }
+          />
+          <Route
+            path="/register"
+            element={
+              <Register
+                setIsAuthenticated={setIsAuthenticated}
+                setUserId={setUserId}
+                setProfileName={setProfileName}
               />
             }
           />
@@ -55,10 +95,7 @@ function Navigation() {
                 path="/createpost"
                 element={<CreatePost authorId={userId} />}
               />
-              <Route
-                path="/yourpost"
-                element={<YourPost/>}
-              />
+              <Route path="/yourpost" element={<YourPost />} />
             </>
           )}
         </Routes>

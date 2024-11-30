@@ -3,6 +3,8 @@ import axios from "axios";
 
 function YourPost() {
   const [yourBlogs, setYourBlogs] = useState([]);
+  const [expandedPosts, setExpandedPosts] = useState({});
+
   useEffect(() => {
     axios
       .get("http://localhost:3000/yourpost", { withCredentials: true })
@@ -14,29 +16,36 @@ function YourPost() {
         console.error(err);
       });
   }, []);
+  
+  const toggleExpand = (index) => {
+    setExpandedPosts((prevExpandedPosts) => ({
+      ...prevExpandedPosts,
+      [index]: !prevExpandedPosts[index],
+    }));
+  };
 
   return (
     <>
-      <table>
-        <thead>
-          <tr>
-            <th>Title</th>
-            <th>Content</th>
-            <th>Date</th>
-            <th>Author</th>
-          </tr>
-        </thead>
-        <tbody>
-          {yourBlogs.map((blog, i) => (
-            <tr key={i}>
-              <td> {blog.post_title} </td>
-              <td> {blog.post_content} </td>
-              <td> {blog.post_date} </td>
-              <td> {blog.username} </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      {yourBlogs.map((blog, i) => (
+        <div className="blog-card" key={i}>
+          <h2>{blog.post_title}</h2>
+          <p>
+            <strong>By:</strong> {blog.username}
+          </p>
+          <p>
+            <strong>Date:</strong>{" "}
+            {new Date(blog.post_date).toISOString().split("T")[0]}
+          </p>
+          <p>
+            {expandedPosts[i]
+              ? blog.post_content
+              : blog.post_content.slice(0, 100) + "..."}
+          </p>
+          <button onClick={() => toggleExpand(i)}>
+            {expandedPosts[i] ? "Read Less" : "Read More"}
+          </button>
+        </div>
+      ))}
     </>
   );
 }
