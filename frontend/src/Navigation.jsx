@@ -11,14 +11,15 @@ import YourPost from "./YourPost";
 function Navigation() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [userId, setUserId] = useState(null);
-  const [profileName, setProfileName]= useState("");
+  const [profileName, setProfileName] = useState("");
 
   function handleLogout() {
     setIsAuthenticated(false);
     setUserId(null);
     axios
       .post("http://localhost:3000/logout", {}, { withCredentials: true })
-      .then(() => {
+      .then((res) => {
+        alert(res.data.message)
         navigate("/");
       });
   }
@@ -27,45 +28,26 @@ function Navigation() {
     <Router>
       <div>
         <nav className="navbar">
-          <h1>BlogIn</h1>
-          <ul>
-            <li>
-              
-              <Link to="/">Home</Link>
-            </li>
+          <div className="brand-name">
+            <h1>BlogIn...</h1>
+          </div>
+          <div className="nav-elements">
             {!isAuthenticated ? (
-              <div>
-                <li>
-                  <button>
-                    <Link to="/login">Login</Link>
-                  </button>
-                </li>
-                <li>
-                  <button>
-                    <Link to="/register">Register</Link>
-                  </button>
-                </li>
+              <div className="nav-childelements">
+                <Link to="/">Home</Link>
+                <Link to="/login" className="nav-btn">Login</Link>/
+                <Link to="/register" className="nav-btn">Register</Link>
               </div>
             ) : (
-              <div>
-                <li>
-                  
-                  <Link to="/createpost"> Create Post</Link>
-                </li>
-                <li>
-                  
-                  <Link to="/yourpost">Your Post</Link>
-                </li>
-                <li>
-                  
-                  <button onClick={handleLogout}>Logout</button>
-                </li>
-                <li>
-                  <Profile userName={profileName}/>
-                </li>
+              <div className="nav-childelements">
+                <Profile userName={profileName}/>
+                <Link to="/">Home</Link>
+                <Link to="/createpost"> Create Post</Link>
+                <Link to="/yourpost">Your Post</Link>
+                <button onClick={handleLogout} className="nav-btn">Logout</button>
               </div>
             )}
-          </ul>
+          </div>
         </nav>
         <Routes>
           <Route path="/" element={<Home />} />

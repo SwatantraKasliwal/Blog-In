@@ -16,7 +16,7 @@ function YourPost() {
         console.error(err);
       });
   }, []);
-  
+
   const toggleExpand = (index) => {
     setExpandedPosts((prevExpandedPosts) => ({
       ...prevExpandedPosts,
@@ -26,26 +26,38 @@ function YourPost() {
 
   return (
     <>
-      {yourBlogs.map((blog, i) => (
-        <div className="blog-card" key={i}>
-          <h2>{blog.post_title}</h2>
-          <p>
-            <strong>By:</strong> {blog.username}
-          </p>
-          <p>
-            <strong>Date:</strong>{" "}
-            {new Date(blog.post_date).toISOString().split("T")[0]}
-          </p>
-          <p>
-            {expandedPosts[i]
-              ? blog.post_content
-              : blog.post_content.slice(0, 100) + "..."}
-          </p>
-          <button onClick={() => toggleExpand(i)}>
-            {expandedPosts[i] ? "Read Less" : "Read More"}
-          </button>
-        </div>
-      ))}
+      <div className="home-container">
+        {yourBlogs.map((blog, i) => (
+          <div className="home-element">
+            <div key={i}>
+              <div className="home-title">
+                <h2>{blog.post_title}</h2>
+              </div>
+              <div className="home-content">
+                <p>
+                  <strong>By:</strong> {blog.username}
+                </p>
+              </div>
+              <div className="home-content">
+                <p>
+                  <strong>Date:</strong>{" "}
+                  {new Date(blog.post_date).toISOString().split("T")[0]}
+                </p>
+              </div>
+              <div className="home-content">
+                <p>
+                  {expandedPosts[i]
+                    ? blog.post_content
+                    : blog.post_content.slice(0, 100) + "..."}
+                </p>
+              </div>
+              <button onClick={() => toggleExpand(i)} className="btn-element">
+                {expandedPosts[i] ? "Read Less" : "Read More"}
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
     </>
   );
 }

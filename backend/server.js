@@ -16,8 +16,8 @@ app.use(cookieParser());
 
 app.use(
   cors({
-    origin: "http://localhost:5173", // Change to your React frontend URL
-    credentials: true, // Allow credentials (cookies) to be sent from the client
+    origin: "http://localhost:5173",
+    credentials: true, 
   })
 );
 env.config();
@@ -29,7 +29,7 @@ app.use(
     saveUninitialized: true,
     cookie: {
       httpOnly: true,
-      secure: false, // Set to true if using HTTPS
+      secure: false,
       maxAge: 24 * 60 * 60 * 1000, // 24 hours
     },
   })
@@ -49,7 +49,7 @@ db.connect();
 
 app.get("/", async (req, res) => {
   const query =
-    "SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author;";
+    "SELECT p.*, u.username FROM posts p JOIN userlogin u ON u.id = p.post_author ORDER BY p.post_id DESC";
   try {
     db.query(query, (err, data) => {
       if (err) {
@@ -70,7 +70,8 @@ app.get("/yourpost", (req, res) => {
       `SELECT p.*, u.username 
        FROM posts p 
        JOIN userlogin u ON u.id = p.post_author 
-       WHERE p.post_author = $1`,
+       WHERE p.post_author = $1
+       ORDER BY p.post_id DESC`,
       [userId],
       (err, data) => {
         if (err) {
@@ -87,9 +88,9 @@ app.get("/yourpost", (req, res) => {
 
 app.post("/createpost", async (req, res) => {
   if (req.isAuthenticated()) {
-    const { title, content, authorId } = req.body;
+    const { title, content, authorId} = req.body;
     const postDate = new Date().toISOString().slice(0, 10);
-    console.log("Received Data:", { title, content, authorId });
+    console.log("Received Data:", { title, content, authorId,postDate });
     if (!title || !content || !authorId) {
       return res
         .status(400)
