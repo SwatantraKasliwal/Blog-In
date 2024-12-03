@@ -17,7 +17,7 @@ app.use(cookieParser());
 app.use(
   cors({
     origin: "http://localhost:5173",
-    credentials: true, 
+    credentials: true,
   })
 );
 env.config();
@@ -88,9 +88,9 @@ app.get("/yourpost", (req, res) => {
 
 app.post("/createpost", async (req, res) => {
   if (req.isAuthenticated()) {
-    const { title, content, authorId} = req.body;
+    const { title, content, authorId } = req.body;
     const postDate = new Date().toISOString().slice(0, 10);
-    console.log("Received Data:", { title, content, authorId,postDate });
+    console.log("Received Data:", { title, content, authorId, postDate });
     if (!title || !content || !authorId) {
       return res
         .status(400)
@@ -175,6 +175,27 @@ app.post("/logout", (req, res) => {
       res.json({ success: true, message: "Logged out successfully." });
     });
   });
+});
+
+app.post("/delete", (req, res) => {
+  if (req.isAuthenticated()) {
+    const userId = req.user.id;
+    const { postId } = req.body;
+    console.log("this is from /delete section: ", userId, postId);
+    db.query(
+      "DELETE from posts WHERE post_id=$1 AND post_author=$2",
+      [postId, userId],
+      (err, result) => {
+        if (err) {
+          console.error("Database query error:", err);
+          return res.status(500).json({ error: "Internal Server Error" });
+        }
+        return res
+          .status(200)
+          .json({ success: true, message: "Post deleted successfully." });
+      }
+    );
+  }
 });
 
 passport.use(

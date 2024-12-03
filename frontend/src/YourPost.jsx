@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 function YourPost() {
   const [yourBlogs, setYourBlogs] = useState([]);
   const [expandedPosts, setExpandedPosts] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     axios
@@ -24,11 +26,26 @@ function YourPost() {
     }));
   };
 
+  const handleDeleteSubmit=(postId) =>(event)=>{
+    event.preventDefault();
+    console.log(postId);
+    axios.post("http://localhost:3000/delete", {postId},{ withCredentials: true })
+    .then((res)=>{
+      console.log(res.data);
+      setYourBlogs(yourBlogs.filter((blog) => blog.post_id !== postId));
+      alert(res.data.message);
+      navigate("/yourpost");
+    }).catch(err=>{
+      console.log("This is the error in the delete section", err);
+      alert("Error Deleting the post");
+    })
+  }
+
   return (
     <>
       <div className="home-container">
         {yourBlogs.map((blog, i) => (
-          <div className="home-element">
+          <div className="home-element" key={i}>
             <div key={i}>
               <div className="home-title">
                 <h2>{blog.post_title}</h2>
@@ -54,6 +71,11 @@ function YourPost() {
               <button onClick={() => toggleExpand(i)} className="btn-element">
                 {expandedPosts[i] ? "Read Less" : "Read More"}
               </button>
+              <div>
+                <form onSubmit={handleDeleteSubmit (blog.post_id)}>
+                <button className="btn-element delete-btn" type="submit">Delete</button>
+                </form>
+              </div>
             </div>
           </div>
         ))}

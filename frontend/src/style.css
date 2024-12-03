@@ -7,6 +7,7 @@
   padding: 0;
   text-decoration: none;
   color: black;
+  scroll-behavior: smooth;
 }
 
 .navbar {
@@ -21,6 +22,7 @@
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
+  background-color: white;
 }
 
 .brand-name {
@@ -36,18 +38,23 @@
   display: flex;
   flex-direction: row;
   text-align: center;
-  justify-content: right;
+  justify-content: left;
   gap: 1rem;
   align-items: center;
   padding-right: 10px;
+  font-size: 1rem;
 }
 
-.nav-childelements {
+.nav-childelements ul {
   display: flex;
   flex-direction: row;
   gap: 1rem;
-  align-items: center;
-  text-decoration: none;
+  justify-content: left;
+  list-style-type: none;
+  font-family: "Edu AU VIC WA NT Pre", cursive;
+  font-optical-sizing: auto;
+  font-weight: 300;
+  font-style: normal;
 }
 
 .nav-btn {
@@ -96,7 +103,7 @@
   font-optical-sizing: auto;
   font-weight: 300;
   font-style: normal;
-  font-size: 25px;
+  font-size: 1.5rem;
 }
 .home-content {
   font-family: "Josefin Sans", sans-serif;
@@ -144,4 +151,35 @@
   height: 300px;
   white-space: normal;
   overflow-wrap: break-word;
+}
+
+.delete-btn {
+  background-color: #ec1a1a;
+  margin: 5px;
+}
+
+.about-container {
+  padding: 1rem;
+  background-color: #f5e7de;
+  margin: 0.5rem;
+  border-radius: 20px;
+  list-style-type: square;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 480px) {
+  .home-title {
+    font-size: 1.2rem;
+  }
+  .nav-elements {
+    font-size: 0.8rem;
+  }
+
+  .form-container {
+    width: 80%;
+  }
+
+  .about-container{
+    margin: 0.8rem;
+  }
 }
